@@ -61,8 +61,9 @@ def _run_scan(scan_id: int, config: Dict[str, Any]):
         # Fetch scan again just in case there were detached instance issues
         scan = db.query(Scan).filter(Scan.id == scan_id).first()
         if scan:
-            scan.status = "failed"
-            scan.error_message = str(e)
+            if scan.status != "user_stopped":
+                scan.status = "failed"
+                scan.error_message = str(e)
             db.commit()
     finally:
         db.close()

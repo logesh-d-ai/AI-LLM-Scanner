@@ -11,7 +11,7 @@ class Scan(Base):
     model_type = Column(String)
     tool_type = Column(String)
     scan_type = Column(String)
-    status = Column(String, default="pending")  # pending, running, completed, failed
+    status = Column(String, default="pending")  # pending, running, completed, failed, user_stopped
     report_path = Column(String, nullable=True)
     error_message = Column(Text, nullable=True)
     created_at = Column(DateTime, default=datetime.datetime.utcnow)
