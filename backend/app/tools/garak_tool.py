@@ -126,8 +126,21 @@ class GarakTool(BaseTool):
                         
                         # Explode outputs into individual generation attempts
                         outputs = record.get("outputs", [])
-                        triggers = record.get("notes", {}).get("triggers", [])
-                        trigger_keyword = triggers[0] if triggers and isinstance(triggers, list) else ""
+                        # Extract trigger keyword from various possible locations in the Garak record
+                        notes = record.get("notes", {})
+                        trigger_keyword = ""
+                        
+                        if "trigger" in notes:
+                            if isinstance(notes["trigger"], str):
+                                trigger_keyword = notes["trigger"]
+                            elif isinstance(notes["trigger"], list) and notes["trigger"]:
+                                trigger_keyword = str(notes["trigger"][0])
+                        elif "triggers" in notes:
+                            if isinstance(notes["triggers"], list) and notes["triggers"]:
+                                trigger_keyword = str(notes["triggers"][0])
+                                
+                        if not trigger_keyword and "goal" in record:
+                            trigger_keyword = record.get("goal", "")
                         
                         if not outputs:
                             # Edge case with no outputs
