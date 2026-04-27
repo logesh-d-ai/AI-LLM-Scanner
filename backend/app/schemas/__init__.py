@@ -1,1 +1,1 @@
-from .scan import ScanCreate, ScanResponse, ResultResponse
+from .scan import ScanCreate, ScanResponse, TestEndpointRequest

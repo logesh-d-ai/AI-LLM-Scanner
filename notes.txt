@@ -1,0 +1,28 @@
+{"rest.RestGenerator":
+        {
+            "name": "example service",
+            "uri": "https://example.ai/llm",
+            "method": "post",
+            "headers":{
+                "X-Authorization": "$KEY",
+            },
+            "req_template_json_object":{
+                "text":"$INPUT"
+            },
+            "response_json": true,
+            "response_json_field": "text"
+        }
+}
+
+
+custom endpoint scan:
+
+1. Finance app
+
+req:
+{
+  "user_id": "test_user_123",
+  "query": "{{input}}"
+}
+res:
+answer

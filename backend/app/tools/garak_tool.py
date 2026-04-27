@@ -20,6 +20,7 @@ class GarakTool(BaseTool):
         scan_type = config.get("scan_type", "Prompt Injection")
         api_key = config.get("api_key", "")
         probes_list = config.get("probes", [])
+        custom_rest_config = config.get("custom_rest_config")
         
         if probes_list and len(probes_list) > 0:
             probe = ",".join(probes_list)
@@ -29,14 +30,43 @@ class GarakTool(BaseTool):
         temperature = config.get("temperature")
         max_tokens = config.get("max_tokens")
         
-        # Syntax validation
+        if model_type == "rest" and custom_rest_config:
+            headers = {}
+            for k, v in custom_rest_config.get("headers", {}).items():
+                headers[k] = v.replace("{{key}}", "$KEY")
+
+            req_template_str = json.dumps(custom_rest_config.get("req_template", {}))
+            req_template_str = req_template_str.replace("{{input}}", "$INPUT")
+            
+            rest_generator_config = {
+                "rest.RestGenerator": {
+                    "name": "custom_endpoint",
+                    "uri": custom_rest_config.get("endpoint"),
+                    "method": custom_rest_config.get("method", "post").lower(),
+                    "headers": headers,
+                    "req_template_json_object": json.loads(req_template_str),
+                    "response_json": True,
+                    "response_json_field": custom_rest_config.get("response_field")
+                }
+            }
+            if "$KEY" in str(headers):
+                rest_generator_config["rest.RestGenerator"]["key_env_var"] = "REST_API_KEY"
+
+            config_path = os.path.join(output_dir, f"garak_config_{scan_id}.json")
+            with open(config_path, "w", encoding="utf-8") as f:
+                json.dump(rest_generator_config, f, indent=2)
+
         command = [
             sys.executable, "-m", "garak",
             "--model_type", model_type,
-            "--model_name", model_name,
             "--probes", probe,
             "--report_prefix", os.path.join(output_dir, f"garak_report_{scan_id}")
         ]
+        
+        if model_type == "rest" and custom_rest_config:
+            command.extend(["-G", config_path])
+        else:
+            command.extend(["--model_name", model_name])
         
         generator_options = {}
         if temperature is not None:
@@ -53,11 +83,14 @@ class GarakTool(BaseTool):
         # Prepare environment explicitly for the subprocess
         env = os.environ.copy()
         env["PYTHONIOENCODING"] = "utf-8"
+        env["PYTHONUTF8"] = "1"
         if api_key:
             if model_type == "openai":
                 env["OPENAI_API_KEY"] = api_key
             elif model_type == "huggingface":
                 env["HF_TOKEN"] = api_key
+            elif model_type == "rest":
+                env["REST_API_KEY"] = api_key
             else:
                 env["API_KEY"] = api_key # generic fallback
 

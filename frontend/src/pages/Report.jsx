@@ -165,7 +165,7 @@ const Report = () => {
         )}
       </div>
 
-      {scanData.error_message && (
+      {scanData.error_message && status !== 'user_stopped' && (
         <div className="p-4 bg-red-900/20 border border-red-500/30 rounded-2xl text-red-300">
           <h4 className="font-bold text-red-400 mb-1">Execution Failed</h4>
           <p className="text-sm font-mono whitespace-pre-wrap">{scanData.error_message}</p>

@@ -1,5 +1,5 @@
 from pydantic import BaseModel, ConfigDict
-from typing import Optional, List
+from typing import Optional, List, Dict, Any
 import datetime
 
 class ScanCreate(BaseModel):
@@ -13,6 +13,7 @@ class ScanCreate(BaseModel):
     temperature: Optional[float] = None
     probes: Optional[List[str]] = None
     max_tokens: Optional[int] = None
+    custom_rest_config: Optional[dict] = None
 
 class ResultResponse(BaseModel):
     id: int
@@ -37,3 +38,11 @@ class ScanResponse(BaseModel):
     results: Optional[List[ResultResponse]] = []
     
     model_config = ConfigDict(from_attributes=True, protected_namespaces=())
+
+class TestEndpointRequest(BaseModel):
+    endpoint: str
+    method: str
+    headers: Dict[str, str]
+    req_template: Dict[str, Any]
+    response_field: str
+    api_key: Optional[str] = None

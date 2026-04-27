@@ -67,6 +67,8 @@ const History = () => {
                        <span className="text-indigo-400 bg-indigo-500/10 px-2 py-1 rounded-full border border-indigo-500/20 text-xs font-semibold uppercase tracking-wide">Running</span>
                     ) : scan.status === 'failed' ? (
                        <span className="text-red-400 bg-red-500/10 px-2 py-1 rounded-full border border-red-500/20 text-xs font-semibold uppercase tracking-wide">Failed</span>
+                    ) : scan.status === 'user_stopped' ? (
+                       <span className="text-yellow-400 bg-yellow-500/10 px-2 py-1 rounded-full border border-yellow-500/20 text-xs font-semibold uppercase tracking-wide">Stopped</span>
                     ) : (
                        <span className="text-emerald-400 bg-emerald-500/10 px-2 py-1 rounded-full border border-emerald-500/20 text-xs font-semibold uppercase tracking-wide">Completed</span>
                     )}

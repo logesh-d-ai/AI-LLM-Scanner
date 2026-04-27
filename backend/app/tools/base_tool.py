@@ -8,7 +8,6 @@ class BaseTool(ABC):
         Executes the scan.
         Returns the path to the raw output report file.
         """
-        pass
 
     @abstractmethod
     def parse_output(self, raw_output_path: str) -> List[Dict[str, Any]]:
@@ -20,4 +19,3 @@ class BaseTool(ABC):
         - description (str)
         - raw_output (str)
         """
-        pass

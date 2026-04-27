@@ -3,7 +3,9 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 
 import Navbar from './components/Navbar';
 import Home from './pages/Home';
-import NewScan from './pages/NewScan';
+import ScanOptions from './pages/ScanOptions';
+import LocalScan from './pages/LocalScan';
+import CustomScan from './pages/CustomScan';
 import History from './pages/History';
 import Report from './pages/Report';
 
@@ -16,7 +18,9 @@ function App() {
         <main className="max-w-7xl mx-auto py-8 px-4 sm:px-6 lg:px-8">
           <Routes>
             <Route path="/" element={<Home />} />
-            <Route path="/new-scan" element={<NewScan />} />
+            <Route path="/new-scan" element={<ScanOptions />} />
+            <Route path="/local-scan" element={<LocalScan />} />
+            <Route path="/custom-scan" element={<CustomScan />} />
             <Route path="/history" element={<History />} />
             <Route path="/report/:scanId" element={<Report />} />
           </Routes>

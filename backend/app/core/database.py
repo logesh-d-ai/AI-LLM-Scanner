@@ -8,7 +8,7 @@ load_dotenv()
 
 # We load DATABASE_URL from .env. If not set, we default to the SQLite string (or you could raise an error)
 SQLALCHEMY_DATABASE_URL = os.getenv(
-    "DATABASE_URL", "postgresql://postgres:postgres@localhost:5432/LLM-Scanner"
+    "DATABASE_URL"
 )
 
 # Connect args (check_same_thread) are only for SQLite
